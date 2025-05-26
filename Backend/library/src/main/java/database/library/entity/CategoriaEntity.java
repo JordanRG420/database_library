@@ -1,5 +1,5 @@
 package database.library.entity;
 
-public class Categoria {
+public class CategoriaEntity {
     
 }

@@ -2,11 +2,12 @@ package database.library.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDate;
 
 @Data
 @Entity
 @Table(name = "libros")
-public class Libro {
+public class LibroEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -16,14 +17,14 @@ public class Libro {
     
     @ManyToOne
     @JoinColumn(name = "autor_id", nullable = false)
-    private Autor autor;
+    private AutorEntity autor;
     
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
-    private Categoria categoria;
+    private CategoriaEntity categoria;
     
     @Column(nullable = false)
     private Boolean disponible = true;
     
-    private Date fechaPublicacion;
+    private LocalDate fechaPublicacion;
 }

@@ -1,5 +1,5 @@
 package database.library.entity;
 
-public class Autor {
+public class AutorEntity {
     
 }

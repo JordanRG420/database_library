@@ -1,5 +1,5 @@
 package database.library.repository;
 
-public class ICategoriaRepository {
+public class PrestamoRepository {
     
 }

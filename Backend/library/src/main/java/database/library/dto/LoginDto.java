@@ -1,9 +1,9 @@
-package database.library.controller;
+package database.library.dto;
 
 import lombok.Data;
 
 @Data
-public class LoginDTO {
+public class LoginDto {
     private String username;
     private String password;
 }
