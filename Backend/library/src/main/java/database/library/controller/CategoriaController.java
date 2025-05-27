@@ -27,4 +27,22 @@ public class CategoriaController {
         List<CategoriaResponse> categorias = categoriaService.getAllCategorias();
         return ResponseEntity.ok(categorias);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaResponse> getCategoriaById(@PathVariable Integer id) {
+        CategoriaResponse response = categoriaService.getCategoriaById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoriaResponse> updateCategoria(@PathVariable Integer id, @RequestBody CategoriaRequest request) {
+        CategoriaResponse response = categoriaService.updateCategoria(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategoria(@PathVariable Integer id) {
+        categoriaService.deleteCategoria(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -38,4 +38,30 @@ public class AutorService {
         response.setNacionalidad(autor.getNacionalidad());
         return response;
     }
+
+    public AutorResponse getAutorById(Integer id) {
+        AutorEntity autor = autorRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Autor no encontrado")); 
+        return convertToResponse(autor);
+    }
+    
+    public AutorResponse updateAutor(Integer id, AutorRequest request) {
+        AutorEntity autor = autorRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+    
+        autor.setNombre(request.getNombre());
+        autor.setNacionalidad(request.getNacionalidad());
+    
+        AutorEntity updatedAutor = autorRepository.save(autor);
+        return convertToResponse(updatedAutor);
+    }
+    
+    public boolean deleteAutor(Integer id) {
+        if (!autorRepository.existsById(id)) {
+            throw new RuntimeException("Autor no encontrado");
+        }
+        autorRepository.deleteById(id);
+        return true;
+    }
+    
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import database.library.exception.NotFoundException;
 
 @Service
 public class CategoriaService {
@@ -37,5 +38,29 @@ public class CategoriaService {
         response.setNombre(categoria.getNombre());
         response.setDescripcion(categoria.getDescripcion());
         return response;
+    }
+
+    public CategoriaResponse getCategoriaById(Integer id) {
+        CategoriaEntity categoria = categoriaRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
+        return convertToResponse(categoria);
+    }
+    
+    public CategoriaResponse updateCategoria(Integer id, CategoriaRequest request) {
+        CategoriaEntity categoria = categoriaRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
+    
+        categoria.setNombre(request.getNombre());
+        categoria.setDescripcion(request.getDescripcion());
+    
+        CategoriaEntity updated = categoriaRepository.save(categoria);
+        return convertToResponse(updated);
+    }
+    
+    public void deleteCategoria(Integer id) {
+        if (!categoriaRepository.existsById(id)) {
+            throw new NotFoundException("Categoría no encontrada");
+        }
+        categoriaRepository.deleteById(id);
     }
 }

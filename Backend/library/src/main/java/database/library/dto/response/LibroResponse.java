@@ -11,6 +11,6 @@ public class LibroResponse {
     private String autorNombre;
     private Integer categoriaId;
     private String categoriaNombre;
-    private Boolean disponible;
     private LocalDate fechaPublicacion;
+    private Boolean disponible;
 }
