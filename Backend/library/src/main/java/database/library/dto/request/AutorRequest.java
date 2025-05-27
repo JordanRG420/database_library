@@ -1,10 +1,9 @@
-package database.library.dto;
+package database.library.dto.request;
 
 import lombok.Data;
 
 @Data
-public class AutorDto {
+public class AutorRequest {
     private String nombre;
     private String nacionalidad;
-
 }

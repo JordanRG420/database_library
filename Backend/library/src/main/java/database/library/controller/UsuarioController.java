@@ -1,8 +1,10 @@
 package database.library.controller;
 
+import database.library.dto.response.UsuarioResponse;
 import database.library.entity.UsuarioEntity;
-import database.library.repository.UsuarioRepository;
+import database.library.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,36 +14,17 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     @GetMapping
-    public List<UsuarioEntity> getAllUsuarios() {
-        return usuarioRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public UsuarioEntity getUsuarioById(@PathVariable Integer id) {
-        return usuarioRepository.findById(id).orElse(null);
+    public ResponseEntity<List<UsuarioResponse>> getAllUsuarios() {
+        List<UsuarioResponse> usuarios = usuarioService.getAllUsuarios();
+        return ResponseEntity.ok(usuarios);
     }
 
     @PostMapping
-    public UsuarioEntity createUsuario(@RequestBody UsuarioEntity usuario) {
-        return usuarioRepository.save(usuario);
-    }
-
-    @PutMapping("/{id}")
-    public UsuarioEntity updateUsuario(@PathVariable Integer id, @RequestBody UsuarioEntity usuarioDetails) {
-        UsuarioEntity usuario = usuarioRepository.findById(id).orElse(null);
-        if (usuario != null) {
-            usuario.setUsername(usuarioDetails.getUsername());
-            usuario.setPassword(usuarioDetails.getPassword());
-            return usuarioRepository.save(usuario);
-        }
-        return null;
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUsuario(@PathVariable Integer id) {
-        usuarioRepository.deleteById(id);
+    public ResponseEntity<UsuarioResponse> createUsuario(@RequestBody UsuarioEntity usuario) {
+        UsuarioResponse response = usuarioService.createUsuario(usuario);
+        return ResponseEntity.ok(response);
     }
 }

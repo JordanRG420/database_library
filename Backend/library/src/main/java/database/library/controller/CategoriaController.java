@@ -1,8 +1,10 @@
 package database.library.controller;
 
-import database.library.entity.CategoriaEntity;
-import database.library.repository.CategoriaRepository;
+import database.library.dto.request.CategoriaRequest;
+import database.library.dto.response.CategoriaResponse;
+import database.library.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,36 +14,17 @@ import java.util.List;
 public class CategoriaController {
 
     @Autowired
-    private CategoriaRepository categoriaRepository;
-
-    @GetMapping
-    public List<CategoriaEntity> getAllCategorias() {
-        return categoriaRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public CategoriaEntity getCategoriaById(@PathVariable Integer id) {
-        return categoriaRepository.findById(id).orElse(null);
-    }
+    private CategoriaService categoriaService;
 
     @PostMapping
-    public CategoriaEntity createCategoria(@RequestBody CategoriaEntity categoria) {
-        return categoriaRepository.save(categoria);
+    public ResponseEntity<CategoriaResponse> createCategoria(@RequestBody CategoriaRequest request) {
+        CategoriaResponse response = categoriaService.createCategoria(request);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public CategoriaEntity updateCategoria(@PathVariable Integer id, @RequestBody CategoriaEntity categoriaDetails) {
-        CategoriaEntity categoria = categoriaRepository.findById(id).orElse(null);
-        if (categoria != null) {
-            categoria.setNombre(categoriaDetails.getNombre());
-            categoria.setDescripcion(categoriaDetails.getDescripcion());
-            return categoriaRepository.save(categoria);
-        }
-        return null;
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteCategoria(@PathVariable Integer id) {
-        categoriaRepository.deleteById(id);
+    @GetMapping
+    public ResponseEntity<List<CategoriaResponse>> getAllCategorias() {
+        List<CategoriaResponse> categorias = categoriaService.getAllCategorias();
+        return ResponseEntity.ok(categorias);
     }
 }

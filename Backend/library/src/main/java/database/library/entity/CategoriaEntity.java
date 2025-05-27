@@ -5,25 +5,14 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "categoria")
+@Table(name = "categorias")
 public class CategoriaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(unique = true, nullable = false, length = 100)
+    
+    @Column(unique = true, nullable = false)
     private String nombre;
-
-    @Column(length = 500)
+    
     private String descripcion;
-
-    // Constructor vacío necesario para JPA
-    public CategoriaEntity() {
-    }
-
-    // Constructor con parámetros para facilidad de creación
-    public CategoriaEntity(String nombre, String descripcion) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-    }
 }

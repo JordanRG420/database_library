@@ -1,8 +1,10 @@
 package database.library.controller;
 
-import database.library.entity.AutorEntity;
-import database.library.repository.AutorRepository;
+import database.library.dto.request.AutorRequest;
+import database.library.dto.response.AutorResponse;
+import database.library.service.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,36 +14,17 @@ import java.util.List;
 public class AutorController {
 
     @Autowired
-    private AutorRepository autorRepository;
-
-    @GetMapping
-    public List<AutorEntity> getAllAutores() {
-        return autorRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public AutorEntity getAutorById(@PathVariable Integer id) {
-        return autorRepository.findById(id).orElse(null);
-    }
+    private AutorService autorService;
 
     @PostMapping
-    public AutorEntity createAutor(@RequestBody AutorEntity autor) {
-        return autorRepository.save(autor);
+    public ResponseEntity<AutorResponse> createAutor(@RequestBody AutorRequest request) {
+        AutorResponse response = autorService.createAutor(request);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public AutorEntity updateAutor(@PathVariable Integer id, @RequestBody AutorEntity autorDetails) {
-        AutorEntity autor = autorRepository.findById(id).orElse(null);
-        if (autor != null) {
-            autor.setNombre(autorDetails.getNombre());
-            autor.setNacionalidad(autorDetails.getNacionalidad());
-            return autorRepository.save(autor);
-        }
-        return null;
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteAutor(@PathVariable Integer id) {
-        autorRepository.deleteById(id);
+    @GetMapping
+    public ResponseEntity<List<AutorResponse>> getAllAutores() {
+        List<AutorResponse> autores = autorService.getAllAutores();
+        return ResponseEntity.ok(autores);
     }
 }

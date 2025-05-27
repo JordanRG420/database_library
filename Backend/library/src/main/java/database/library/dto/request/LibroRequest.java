@@ -1,10 +1,10 @@
-package database.library.dto;
+package database.library.dto.request;
 
 import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class LibroDto {
+public class LibroRequest {
     private String titulo;
     private Integer autorId;
     private Integer categoriaId;
