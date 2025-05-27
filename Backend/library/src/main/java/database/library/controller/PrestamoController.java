@@ -16,21 +16,46 @@ public class PrestamoController {
     @Autowired
     private PrestamoService prestamoService;
 
+    // CREATE
     @PostMapping
-    public ResponseEntity<PrestamoResponse> realizarPrestamo(@RequestBody PrestamoRequest request) {
-        PrestamoResponse response = prestamoService.realizarPrestamo(request);
+    public ResponseEntity<PrestamoResponse> crearPrestamo(@RequestBody PrestamoRequest request) {
+        PrestamoResponse response = prestamoService.crearPrestamo(request);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/devolver/{id}")
-    public ResponseEntity<Boolean> devolverLibro(@PathVariable Integer id) {
-        boolean resultado = prestamoService.devolverLibro(id);
-        return ResponseEntity.ok(resultado);
+    // READ
+    @GetMapping
+    public ResponseEntity<List<PrestamoResponse>> listarPrestamos() {
+        List<PrestamoResponse> prestamos = prestamoService.listarTodos();
+        return ResponseEntity.ok(prestamos);
     }
 
-    @GetMapping
-    public ResponseEntity<List<PrestamoResponse>> getAllPrestamos() {
-        List<PrestamoResponse> prestamos = prestamoService.getAllPrestamos();
-        return ResponseEntity.ok(prestamos);
+    @GetMapping("/{id}")
+    public ResponseEntity<PrestamoResponse> obtenerPrestamo(@PathVariable Integer id) {
+        PrestamoResponse prestamo = prestamoService.buscarPorId(id);
+        return prestamo != null ? ResponseEntity.ok(prestamo) : ResponseEntity.notFound().build();
+    }
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<PrestamoResponse> actualizarPrestamo(
+            @PathVariable Integer id, 
+            @RequestBody PrestamoRequest request) {
+        PrestamoResponse response = prestamoService.actualizarPrestamo(id, request);
+        return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarPrestamo(@PathVariable Integer id) {
+        boolean eliminado = prestamoService.eliminarPrestamo(id);
+        return eliminado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    // Endpoint específico para devolución
+    @PutMapping("/{id}/devolver")
+    public ResponseEntity<PrestamoResponse> devolverLibro(@PathVariable Integer id) {
+        PrestamoResponse response = prestamoService.devolverLibro(id);
+        return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
     }
 }

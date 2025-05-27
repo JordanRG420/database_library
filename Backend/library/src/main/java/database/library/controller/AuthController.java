@@ -1,7 +1,8 @@
 package database.library.controller;
 
 import database.library.dto.request.LoginRequest;
-import database.library.service.UsuarioService;
+import database.library.dto.response.AuthResponse;
+import database.library.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody LoginRequest request) {
-        boolean isValid = usuarioService.login(request);
-        return ResponseEntity.ok(isValid);
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        AuthResponse response = authService.verificarCredenciales(request);
+        return response != null ? ResponseEntity.ok(response) : ResponseEntity.status(401).build();
     }
 }
