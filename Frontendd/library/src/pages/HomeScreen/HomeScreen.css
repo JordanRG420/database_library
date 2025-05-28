@@ -1,0 +1,103 @@
+/* Estilos generales */
+.welcome-card {
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.welcome-subtitle {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Tarjetas de características */
+.feature-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon-container {
+  padding: 1.5rem 1.5rem 0;
+  text-align: center;
+  color: var(--ion-color-primary);
+}
+
+.feature-card ion-icon {
+  color: inherit;
+}
+
+.feature-card ion-card-header {
+  padding: 1rem;
+}
+
+.feature-card ion-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card ion-card-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Acciones rápidas */
+.quick-actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quick-actions ion-button {
+  --border-radius: 8px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  height: 48px;
+  font-weight: 500;
+}
+
+.quick-actions ion-button:first-child {
+  --background: var(--ion-color-primary);
+  --color: white;
+  --background-hover: var(--ion-color-primary-shade);
+  --background-activated: var(--ion-color-primary-tint);
+}
+
+.quick-actions ion-button:last-child {
+  --color: var(--ion-color-primary);
+  --border-color: var(--ion-color-primary);
+  --background-hover: rgba(var(--ion-color-primary-rgb), 0.08);
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .feature-card {
+    background: var(--ion-color-step-150);
+  }
+  
+  .welcome-card {
+    background: var(--ion-color-step-250) !important;
+  }
+  
+  .feature-card ion-card-subtitle {
+    opacity: 0.6;
+  }
+}

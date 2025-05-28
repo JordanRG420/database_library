@@ -1,0 +1,91 @@
+.autor-form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: var(--ion-background-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background-color: rgba(var(--ion-color-danger-rgb), 0.1);
+  text-align: center;
+}
+
+.form-field-group {
+  margin-bottom: 20px;
+  --background: transparent;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: var(--ion-text-color);
+  font-weight: 500;
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  color: var(--ion-color-primary);
+}
+
+.custom-input {
+  width: 100%;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  margin-top: 5px;
+  color: var(--ion-text-color);
+  border: 1px solid var(--ion-color-medium);
+}
+
+.custom-input::part(placeholder) {
+  color: var(--ion-color-medium);
+  opacity: 1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.cancel-button {
+  --background: var(--ion-color-medium);
+  --background-hover: var(--ion-color-medium-shade);
+  --color: var(--ion-color-medium-contrast);
+  flex: 1;
+}
+
+.submit-button {
+  --background: var(--ion-color-primary);
+  --background-hover: var(--ion-color-primary-shade);
+  --color: var(--ion-color-primary-contrast);
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .cancel-button,
+  .submit-button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
