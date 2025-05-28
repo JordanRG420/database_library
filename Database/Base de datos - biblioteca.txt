@@ -39,6 +39,93 @@ CREATE TABLE prestamos (
 );
 
 ------------------------------------------------------------------------------
+- Trigger para autores
+
+CREATE OR REPLACE FUNCTION trigger_autores_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE NOTICE 'Autor insertado: %', NEW.nombre;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER autores_after_insert
+AFTER INSERT ON autores
+FOR EACH ROW
+EXECUTE FUNCTION trigger_autores_insert();
+
+
+----------------------------------------------------------------------
+
+- Trigger para categorias
+
+CREATE OR REPLACE FUNCTION trigger_categorias_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE NOTICE 'Categoría insertada: %', NEW.nombre;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER categorias_after_insert
+AFTER INSERT ON categorias
+FOR EACH ROW
+EXECUTE FUNCTION trigger_categorias_insert();
+
+----------------------------------------------------------------------
+
+- Trigger para usuarios 
+
+CREATE OR REPLACE FUNCTION trigger_usuarios_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE NOTICE 'Usuario registrado: %', NEW.username;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER usuarios_after_insert
+AFTER INSERT ON usuarios
+FOR EACH ROW
+EXECUTE FUNCTION trigger_usuarios_insert();
+
+-----------------------------------------------------------------------
+
+- Trigger para libros
+
+CREATE OR REPLACE FUNCTION trigger_libros_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE NOTICE 'Libro agregado: %', NEW.titulo;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER libros_after_insert
+AFTER INSERT ON libros
+FOR EACH ROW
+EXECUTE FUNCTION trigger_libros_insert();
+
+--------------------------------------------------------------------------
+
+- Trigger para pestamos 
+
+CREATE OR REPLACE FUNCTION trigger_prestamos_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE NOTICE 'Nuevo préstamo registrado. Libro ID: %, Usuario ID: %',
+        NEW.libro_id, NEW.usuario_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER prestamos_after_insert
+AFTER INSERT ON prestamos
+FOR EACH ROW
+EXECUTE FUNCTION trigger_prestamos_insert();
+
+---------------------------------------------------------------------------
+
 
 -- Función para verificar login
 
