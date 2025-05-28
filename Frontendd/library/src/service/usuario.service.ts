@@ -10,11 +10,34 @@ interface UsuarioRequest {
   password: string;
 }
 
-interface UsuarioResponse {
-  id: number;
-  username: string;
-}
+export const listarUsuarios = async (): Promise<Usuario[]> => {
+  try {
+    const response = await fetch(API_URL);
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al obtener los usuarios");
+    }
 
+    const data = await response.json();
+    
+    // Verificación de estructura de datos
+    if (!Array.isArray(data)) {
+      throw new Error("La respuesta no es un array de usuarios");
+    }
+    
+    if (data.length > 0 && (!data[0].id || !data[0].username)) {
+      console.warn("Los usuarios no tienen la estructura esperada:", data);
+    }
+    
+    return data;
+  } catch (error) {
+    console.error("Error en listarUsuarios:", error);
+    throw error;
+  }
+};
+
+// (Las otras funciones permanecen igual)
 export const crearUsuario = async (usuario: UsuarioRequest): Promise<Usuario> => {
   const response = await fetch(API_URL, {
     method: "POST",
@@ -32,7 +55,7 @@ export const crearUsuario = async (usuario: UsuarioRequest): Promise<Usuario> =>
   return await response.json();
 };
 
-export const obtenerUsuario = async (id: number): Promise<UsuarioResponse> => {
+export const obtenerUsuario = async (id: number): Promise<Usuario> => {
   const response = await fetch(`${API_URL}/${id}`);
 
   if (!response.ok) {
@@ -43,7 +66,7 @@ export const obtenerUsuario = async (id: number): Promise<UsuarioResponse> => {
   return await response.json();
 };
 
-export const actualizarUsuario = async (id: number, usuario: UsuarioRequest): Promise<UsuarioResponse> => {
+export const actualizarUsuario = async (id: number, usuario: UsuarioRequest): Promise<Usuario> => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: {
@@ -70,15 +93,3 @@ export const eliminarUsuario = async (id: number): Promise<void> => {
     throw new Error(errorData.message || "Error al eliminar el usuario");
   }
 };
-
-export const listarUsuarios = async (): Promise<UsuarioResponse[]> => {
-  const response = await fetch(API_URL);
-  
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Error al obtener los usuarios");
-  }
-
-  return await response.json();
-};
-

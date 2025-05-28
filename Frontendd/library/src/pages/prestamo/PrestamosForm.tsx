@@ -11,7 +11,6 @@ import {
   IonLoading,
   IonSelect,
   IonSelectOption,
-  IonDatetime,
   IonTextarea,
 } from "@ionic/react";
 import "./PrestamosForm.css";
@@ -36,7 +35,6 @@ import { listarLibrosDisponibles } from "../../service/libro.service";
 import CustomHeader from "../../components/CustomHeader/CustomHeader";
 import { listarUsuarios } from "../../service/usuario.service";
 
-// Esquema de validación
 const validationSchema = Yup.object({
   libroId: Yup.number()
     .required("El libro es requerido")
@@ -71,7 +69,6 @@ export function PrestamoForm() {
 
       try {
         if (esDevolucion) {
-          // Proceso de devolución
           await devolverLibro(parseInt(id));
           present({
             message: "Devolución registrada correctamente",
@@ -80,7 +77,6 @@ export function PrestamoForm() {
             color: "success",
           });
         } else if (id) {
-          // Modo edición
           await actualizarPrestamo(parseInt(id), {
             libroId: values.libroId,
             usuarioId: values.usuarioId,
@@ -92,7 +88,6 @@ export function PrestamoForm() {
             color: "success",
           });
         } else {
-          // Modo creación
           await crearPrestamo({
             libroId: values.libroId,
             usuarioId: values.usuarioId,
@@ -124,13 +119,27 @@ export function PrestamoForm() {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const [librosData, usuariosData] = await Promise.all([
-          listarLibrosDisponibles(),
-          listarUsuarios(),
-        ]);
+        setIsLoading(true);
 
+        const librosData = await listarLibrosDisponibles();
         setLibros(librosData);
-        setUsuarios(usuariosData);
+
+        try {
+          const usuariosData = await listarUsuarios();
+          const usuariosFormateados = usuariosData.map((usuario) => ({
+            id: usuario.id,
+            nombre: usuario.username,
+          }));
+          setUsuarios(usuariosFormateados);
+        } catch (error) {
+          console.error("Error cargando usuarios:", error);
+          present({
+            message: "Error al cargar la lista de usuarios",
+            duration: 3000,
+            color: "danger",
+          });
+          setUsuarios([]);
+        }
 
         if (id) {
           const prestamoData = await obtenerPrestamo(parseInt(id));
@@ -140,7 +149,6 @@ export function PrestamoForm() {
             observaciones: "",
           });
 
-          // Verificar si el préstamo está devuelto
           if (!prestamoData.devuelto) {
             setEsDevolucion(true);
           }
@@ -152,7 +160,6 @@ export function PrestamoForm() {
           position: "top",
           color: "danger",
         });
-        history.push("/prestamos");
       } finally {
         setIsLoading(false);
       }
@@ -181,9 +188,7 @@ export function PrestamoForm() {
 
       <IonContent className="ion-padding">
         <form className="prestamo-form">
-          <h2
-            style={{ color: "var(--ion-color-primary)", textAlign: "center" }}
-          >
+          <h2 style={{ color: "var(--ion-color-primary)", textAlign: "center" }}>
             {esDevolucion
               ? "Registrar Devolución"
               : id
@@ -243,7 +248,7 @@ export function PrestamoForm() {
             </IonText>
           )}
 
-          {/* Observaciones (solo para devolución) */}
+          {/* Observaciones */}
           {esDevolucion && (
             <IonItem className="form-field-group">
               <IonIcon
@@ -264,14 +269,12 @@ export function PrestamoForm() {
             </IonItem>
           )}
 
-          {/* Mensaje de error general */}
           {errorMessage && (
             <div className="error-message">
               <IonText color="danger">{errorMessage}</IonText>
             </div>
           )}
 
-          {/* Botones de acción */}
           <div className="form-actions">
             <IonButton
               className="cancel-button"
