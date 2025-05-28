@@ -52,14 +52,18 @@ export function CategoriaForm() {
     },
     validationSchema,
     validateOnChange: false,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting, setErrors }) => {
       setIsSubmitting(true);
       setErrorMessage(null);
 
       try {
+        const categoriaData = {
+          nombre: values.nombre,
+          descripcion: values.descripcion || undefined,
+        };
+
         if (id) {
-          // Modo edición
-          await updateCategoria(parseInt(id), values);
+          await updateCategoria(parseInt(id), categoriaData);
           present({
             message: "Categoría actualizada correctamente",
             duration: 3000,
@@ -67,8 +71,7 @@ export function CategoriaForm() {
             color: "success",
           });
         } else {
-          // Modo creación
-          await createCategoria(values);
+          await createCategoria(categoriaData);
           present({
             message: "Categoría creada correctamente",
             duration: 3000,
@@ -77,10 +80,11 @@ export function CategoriaForm() {
           });
         }
 
-        history.push("/categorias");
+        history.push("/inicio");
       } catch (error: any) {
         const message = error.message || "Error al guardar la categoría";
         setErrorMessage(message);
+        setErrors({ nombre: message });
         present({
           message,
           duration: 5000,
@@ -89,6 +93,7 @@ export function CategoriaForm() {
         });
       } finally {
         setIsSubmitting(false);
+        setSubmitting(false);
       }
     },
   });
@@ -128,7 +133,7 @@ export function CategoriaForm() {
     <IonPage>
       <CustomHeader
         pageName={id ? "Editar Categoría" : "Nueva Categoría"}
-        showMenuButton={false}
+        showMenuButton={true}
         showLogoutButton={false}
       />
 
@@ -210,7 +215,7 @@ export function CategoriaForm() {
             <IonButton
               className="submit-button"
               expand="block"
-              onClick={() => formik.handleSubmit()}
+              onClick={() => formik.handleSubmit()} // Eliminado el history.push que estaba aquí
               disabled={isSubmitting}
             >
               <IonIcon icon={saveOutline} slot="start" />

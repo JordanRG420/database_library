@@ -14,7 +14,12 @@ import {
 import "./Login.css";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
-import { personOutline, lockClosedOutline, eyeOutline, eyeOffOutline } from "ionicons/icons";
+import {
+  personOutline,
+  lockClosedOutline,
+  eyeOutline,
+  eyeOffOutline,
+} from "ionicons/icons";
 import * as Yup from "yup";
 import { login } from "../../service/auth.service";
 import CustomHeader from "../../components/CustomHeader/CustomHeader";
@@ -94,7 +99,9 @@ export function Login() {
       />
       <IonContent className="ion-padding">
         <form className="usuario-form" onSubmit={formik.handleSubmit}>
-          <h2 style={{ color: "var(--ion-color-primary)", textAlign: "center" }}>
+          <h2
+            style={{ color: "var(--ion-color-primary)", textAlign: "center" }}
+          >
             Iniciar Sesión
           </h2>
 
@@ -121,7 +128,11 @@ export function Login() {
 
           {/* Contraseña */}
           <IonItem className="form-field-group">
-            <IonIcon icon={lockClosedOutline} slot="start" className="input-icon" />
+            <IonIcon
+              icon={lockClosedOutline}
+              slot="start"
+              className="input-icon"
+            />
             <IonLabel position="stacked">Contraseña*</IonLabel>
             <IonInput
               className="custom-input"
@@ -156,6 +167,19 @@ export function Login() {
           >
             {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </IonButton>
+
+          <IonText
+            color="primary"
+            style={{
+              display: "block",
+              textAlign: "center",
+              marginTop: "1rem",
+              cursor: "pointer",
+            }}
+            onClick={() => history.push("/usuarios")}
+          >
+            <b>REGISTRARSE</b>
+          </IonText>
         </form>
 
         <IonLoading isOpen={isLoading} message="Iniciando sesión..." />

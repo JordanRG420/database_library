@@ -100,7 +100,7 @@ export function LibroForm() {
           });
         }
 
-        history.push("/libros");
+        history.push("/inicio"); // Cambiado de "/libros" a "/inicio"
       } catch (error: any) {
         const message = error.message || "Error al guardar el libro";
         setErrorMessage(message);
@@ -143,7 +143,7 @@ export function LibroForm() {
           position: "top",
           color: "danger",
         });
-        history.push("/libros");
+        history.push("/inicio");
       } finally {
         setIsLoading(false);
       }
@@ -160,7 +160,7 @@ export function LibroForm() {
     <IonPage>
       <CustomHeader
         pageName={id ? "Editar Libro" : "Nuevo Libro"}
-        showMenuButton={false}
+        showMenuButton={true}
         showLogoutButton={false}
       />
 
@@ -286,7 +286,7 @@ export function LibroForm() {
             <IonButton
               className="submit-button"
               expand="block"
-              onClick={() => formik.handleSubmit()}
+              onClick={() => formik.handleSubmit()} // Eliminado el history.push que estaba aquí
               disabled={isSubmitting}
             >
               <IonIcon icon={saveOutline} slot="start" />

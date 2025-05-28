@@ -73,7 +73,34 @@
   height: 48px;
   font-weight: 500;
 }
+/* HomeScreen.css - Añade estas reglas */
 
+/* Estilos para las cards con colores específicos */
+.feature-card[color="dark"] {
+  --background: var(--ion-color-dark);
+  --color: white;
+}
+
+.feature-card[color="medium"] {
+  --background: var(--ion-color-medium);
+  --color: white;
+}
+
+.feature-card[color="primary"] {
+  --background: var(--ion-color-primary);
+  --color: white;
+}
+
+/* Asegúrate que el texto sea legible en todas las cards */
+.feature-card ion-card-title,
+.feature-card ion-card-subtitle {
+  color: inherit;
+}
+
+/* Iconos en las cards */
+.feature-card ion-icon {
+  color: inherit;
+}
 .quick-actions ion-button:first-child {
   --background: var(--ion-color-primary);
   --color: white;

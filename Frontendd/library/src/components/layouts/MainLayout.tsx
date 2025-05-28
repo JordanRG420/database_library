@@ -14,6 +14,7 @@ import {
   documentTextOutline,
   receiptOutline,
   personOutline,
+  bookOutline,
 } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 import "../CustomHeader/CustomHeader.css";
@@ -70,7 +71,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
                 <IonLabel>Inicio</IonLabel>
               </IonItem>
             </IonMenuToggle>
-
+            {/* Otros items del menú 
             <IonMenuToggle autoHide={false}>
               <IonItem
                 button
@@ -79,12 +80,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
               >
                 <IonIcon
                   slot="start"
-                  icon={documentTextOutline}
+                  icon={personOutline}
                   className="menu-icon"
                 />
                 <IonLabel>Usuarios</IonLabel>
               </IonItem>
             </IonMenuToggle>
+            */}
 
             <IonMenuToggle autoHide={false}>
               <IonItem
@@ -94,7 +96,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
               >
                 <IonIcon
                   slot="start"
-                  icon={documentTextOutline}
+                  icon={personOutline}
                   className="menu-icon"
                 />
                 <IonLabel>Autores</IonLabel>
@@ -109,7 +111,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
               >
                 <IonIcon
                   slot="start"
-                  icon={receiptOutline}
+                  icon={bookOutline}
                   className="menu-icon"
                 />
                 <IonLabel>Libros</IonLabel>
@@ -124,7 +126,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
               >
                 <IonIcon
                   slot="start"
-                  icon={receiptOutline}
+                  icon={documentTextOutline}
                   className="menu-icon"
                 />
                 <IonLabel>Categorias</IonLabel>

@@ -126,7 +126,7 @@ export function AutorForm() {
     <IonPage>
       <CustomHeader
         pageName={id ? "Editar Autor" : "Nuevo Autor"}
-        showMenuButton={false}
+        showMenuButton={true}
         showLogoutButton={false}
       />
 
@@ -189,7 +189,10 @@ export function AutorForm() {
               className="cancel-button"
               expand="block"
               fill="outline"
-              onClick={() => history.goBack()}
+              onClick={async () => {
+                await formik.handleSubmit();
+                history.push("/inicio");
+              }}
               disabled={isSubmitting}
             >
               <IonIcon icon={arrowBackOutline} slot="start" />
@@ -199,7 +202,10 @@ export function AutorForm() {
             <IonButton
               className="submit-button"
               expand="block"
-              onClick={() => formik.handleSubmit()}
+              onClick={async () => {
+                await formik.handleSubmit();
+                history.push("/inicio");
+              }}
               disabled={isSubmitting}
             >
               <IonIcon icon={saveOutline} slot="start" />

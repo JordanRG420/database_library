@@ -123,7 +123,7 @@ export function UsuarioForm() {
             position: "top",
             color: "danger",
           });
-          history.push("/usuarios");
+          history.push("/inicio");
         } finally {
           setIsLoading(false);
         }
@@ -228,7 +228,10 @@ export function UsuarioForm() {
             <IonButton
               className="submit-button"
               expand="block"
-              onClick={() => formik.handleSubmit()}
+              onClick={async () => {
+                await formik.handleSubmit();
+                history.push("/login");
+              }}
               disabled={isSubmitting}
             >
               <IonIcon icon={saveOutline} slot="start" />

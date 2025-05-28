@@ -44,7 +44,7 @@ const HomeScreen: React.FC = () => {
       title: "Usuarios",
       description: "Gestión de usuarios",
       icon: personOutline,
-      color: "dark",
+      color: "primary",
       route: "/usuarios",
     },
     {
@@ -143,17 +143,14 @@ const HomeScreen: React.FC = () => {
 
         {/* Acciones rápidas */}
         <div className="quick-actions">
-          <IonButton
-            expand="block"
-            onClick={() => navigateTo("/prestamos/nuevo")}
-          >
+          <IonButton expand="block" onClick={() => navigateTo("/prestamos")}>
             <IonIcon icon={addOutline} slot="start" />
             Nuevo Préstamo
           </IonButton>
           <IonButton
             expand="block"
             fill="outline"
-            onClick={() => navigateTo("/libros/nuevo")}
+            onClick={() => navigateTo("/libros")}
           >
             <IonIcon icon={addOutline} slot="start" />
             Nuevo Libro
