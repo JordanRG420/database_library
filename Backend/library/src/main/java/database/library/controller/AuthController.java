@@ -15,7 +15,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/login.")
+    @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         AuthResponse response = authService.verificarCredenciales(request);
         return response != null ? ResponseEntity.ok(response) : ResponseEntity.status(401).build();
