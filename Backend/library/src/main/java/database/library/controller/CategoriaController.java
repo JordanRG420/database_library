@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins ="*")
 @RestController
 @RequestMapping("/api/categorias")
 public class CategoriaController {
@@ -36,7 +35,8 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaResponse> updateCategoria(@PathVariable Integer id, @RequestBody CategoriaRequest request) {
+    public ResponseEntity<CategoriaResponse> updateCategoria(@PathVariable Integer id,
+            @RequestBody CategoriaRequest request) {
         CategoriaResponse response = categoriaService.updateCategoria(id, request);
         return ResponseEntity.ok(response);
     }

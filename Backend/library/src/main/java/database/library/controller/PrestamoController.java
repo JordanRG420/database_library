@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins ="*")
 @RestController
 @RequestMapping("/api/prestamos")
 public class PrestamoController {
@@ -40,7 +39,7 @@ public class PrestamoController {
     // UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<PrestamoResponse> actualizarPrestamo(
-            @PathVariable Integer id, 
+            @PathVariable Integer id,
             @RequestBody PrestamoRequest request) {
         PrestamoResponse response = prestamoService.actualizarPrestamo(id, request);
         return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();

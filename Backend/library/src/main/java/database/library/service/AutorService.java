@@ -17,12 +17,16 @@ public class AutorService {
     private AutorRepository autorRepository;
 
     public AutorResponse createAutor(AutorRequest request) {
-        AutorEntity autor = new AutorEntity();
-        autor.setNombre(request.getNombre());
-        autor.setNacionalidad(request.getNacionalidad());
-        
-        AutorEntity savedAutor = autorRepository.save(autor);
-        return convertToResponse(savedAutor);
+        try {
+            AutorEntity autor = new AutorEntity();
+            autor.setNombre(request.getNombre());
+            autor.setNacionalidad(request.getNacionalidad());
+
+            AutorEntity savedAutor = autorRepository.save(autor);
+            return convertToResponse(savedAutor);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear autor: " + e.getMessage());
+        }
     }
 
     public List<AutorResponse> getAllAutores() {
@@ -41,21 +45,21 @@ public class AutorService {
 
     public AutorResponse getAutorById(Integer id) {
         AutorEntity autor = autorRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Autor no encontrado")); 
+                .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
         return convertToResponse(autor);
     }
-    
+
     public AutorResponse updateAutor(Integer id, AutorRequest request) {
         AutorEntity autor = autorRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
-    
+                .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+
         autor.setNombre(request.getNombre());
         autor.setNacionalidad(request.getNacionalidad());
-    
+
         AutorEntity updatedAutor = autorRepository.save(autor);
         return convertToResponse(updatedAutor);
     }
-    
+
     public boolean deleteAutor(Integer id) {
         if (!autorRepository.existsById(id)) {
             throw new RuntimeException("Autor no encontrado");
@@ -63,5 +67,5 @@ public class AutorService {
         autorRepository.deleteById(id);
         return true;
     }
-    
+
 }

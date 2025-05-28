@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins ="*")
 @RestController
 @RequestMapping("/api/autores")
 public class AutorController {
@@ -33,18 +32,18 @@ public class AutorController {
     public ResponseEntity<AutorResponse> getAutorById(@PathVariable Integer id) {
         AutorResponse autor = autorService.getAutorById(id);
         return ResponseEntity.ok(autor);
-}
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<AutorResponse> updateAutor(@PathVariable Integer id, @RequestBody AutorRequest request) {
         AutorResponse response = autorService.updateAutor(id, request);
         return ResponseEntity.ok(response);
-}
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAutor(@PathVariable Integer id) {
         autorService.deleteAutor(id);
         return ResponseEntity.noContent().build();
-}
+    }
 
 }

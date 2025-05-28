@@ -25,38 +25,38 @@ public class UsuarioService {
         UsuarioEntity usuario = new UsuarioEntity();
         usuario.setUsername(request.getUsername());
         usuario.setPassword(request.getPassword());
-        
+
         UsuarioEntity savedUsuario = usuarioRepository.save(usuario);
         return convertToResponse(savedUsuario);
     }
 
     public List<UsuarioResponse> listarTodos() {
         return usuarioRepository.findAll().stream()
-            .map(this::convertToResponse)
-            .collect(Collectors.toList());
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     public UsuarioResponse buscarPorId(Integer id) {
         return usuarioRepository.findById(id)
-            .map(this::convertToResponse)
-            .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+                .map(this::convertToResponse)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
     }
 
     public UsuarioResponse actualizarUsuario(Integer id, UsuarioRequest request) {
         UsuarioEntity usuario = usuarioRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
-        
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+
         if (request.getUsername() != null) {
             if (usuarioRepository.existsByUsernameAndIdNot(request.getUsername(), id)) {
                 throw new IllegalStateException("El nombre de usuario ya está en uso");
             }
             usuario.setUsername(request.getUsername());
         }
-        
+
         if (request.getPassword() != null) {
             usuario.setPassword(request.getPassword());
         }
-        
+
         UsuarioEntity updatedUsuario = usuarioRepository.save(usuario);
         return convertToResponse(updatedUsuario);
     }
@@ -65,12 +65,12 @@ public class UsuarioService {
         if (!usuarioRepository.existsById(id)) {
             throw new NotFoundException("Usuario no encontrado");
         }
-        
+
         // Verificar si tiene préstamos activos
         if (usuarioRepository.tienePrestamosActivos(id)) {
             throw new IllegalStateException("No se puede eliminar usuario con préstamos activos");
         }
-        
+
         usuarioRepository.deleteById(id);
         return true;
     }

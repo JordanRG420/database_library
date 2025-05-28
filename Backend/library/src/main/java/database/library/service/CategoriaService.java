@@ -18,12 +18,16 @@ public class CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     public CategoriaResponse createCategoria(CategoriaRequest request) {
-        CategoriaEntity categoria = new CategoriaEntity();
-        categoria.setNombre(request.getNombre());
-        categoria.setDescripcion(request.getDescripcion());
-        
-        CategoriaEntity savedCategoria = categoriaRepository.save(categoria);
-        return convertToResponse(savedCategoria);
+        try {
+            CategoriaEntity categoria = new CategoriaEntity();
+            categoria.setNombre(request.getNombre());
+            categoria.setDescripcion(request.getDescripcion());
+
+            CategoriaEntity savedCategoria = categoriaRepository.save(categoria);
+            return convertToResponse(savedCategoria);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear categoría: " + e.getMessage());
+        }
     }
 
     public List<CategoriaResponse> getAllCategorias() {
@@ -42,21 +46,21 @@ public class CategoriaService {
 
     public CategoriaResponse getCategoriaById(Integer id) {
         CategoriaEntity categoria = categoriaRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
+                .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
         return convertToResponse(categoria);
     }
-    
+
     public CategoriaResponse updateCategoria(Integer id, CategoriaRequest request) {
         CategoriaEntity categoria = categoriaRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
-    
+                .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
+
         categoria.setNombre(request.getNombre());
         categoria.setDescripcion(request.getDescripcion());
-    
+
         CategoriaEntity updated = categoriaRepository.save(categoria);
         return convertToResponse(updated);
     }
-    
+
     public void deleteCategoria(Integer id) {
         if (!categoriaRepository.existsById(id)) {
             throw new NotFoundException("Categoría no encontrada");

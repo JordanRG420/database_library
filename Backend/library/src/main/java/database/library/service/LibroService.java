@@ -17,48 +17,64 @@ public class LibroService {
 
     @Autowired
     private LibroRepository libroRepository;
-    
+
     @Autowired
     private AutorRepository autorRepository;
-    
+
     @Autowired
     private CategoriaRepository categoriaRepository;
 
     @Transactional
     public LibroResponse crearLibro(LibroRequest request) {
-        AutorEntity autor = autorRepository.findById(request.getAutorId())
-            .orElseThrow(() -> new NotFoundException("Autor no encontrado"));
-        
-        CategoriaEntity categoria = categoriaRepository.findById(request.getCategoriaId())
-            .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
+        try {
+            System.out.println("Request recibido: " + request); // Log simple
 
-        LibroEntity libro = new LibroEntity();
-        libro.setTitulo(request.getTitulo());
-        libro.setAutor(autor);
-        libro.setCategoria(categoria);
-        libro.setFechaPublicacion(request.getFechaPublicacion());
-        libro.setDisponible(true);
+            AutorEntity autor = autorRepository.findById(request.getAutorId())
+                    .orElseThrow(
+                            () -> new NotFoundException("Autor con ID " + request.getAutorId() + " no encontrado"));
 
-        LibroEntity savedLibro = libroRepository.save(libro);
-        return convertToResponse(savedLibro);
+            System.out.println("Autor encontrado: " + autor.getNombre());
+
+            CategoriaEntity categoria = categoriaRepository.findById(request.getCategoriaId())
+                    .orElseThrow(() -> new NotFoundException(
+                            "Categoría con ID " + request.getCategoriaId() + " no encontrada"));
+
+            System.out.println("Categoría encontrada: " + categoria.getNombre());
+
+            LibroEntity libro = new LibroEntity();
+            libro.setTitulo(request.getTitulo());
+            libro.setAutor(autor);
+            libro.setCategoria(categoria);
+            libro.setFechaPublicacion(request.getFechaPublicacion());
+            libro.setDisponible(true);
+
+            System.out.println("Guardando libro: " + libro);
+
+            LibroEntity savedLibro = libroRepository.save(libro);
+            return convertToResponse(savedLibro);
+        } catch (Exception e) {
+            System.err.println("Error al crear libro: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public List<LibroResponse> listarTodos() {
         return libroRepository.findAll().stream()
-            .map(this::convertToResponse)
-            .collect(Collectors.toList());
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     public LibroResponse buscarPorId(Integer id) {
         return libroRepository.findById(id)
-            .map(this::convertToResponse)
-            .orElseThrow(() -> new NotFoundException("Libro no encontrado"));
+                .map(this::convertToResponse)
+                .orElseThrow(() -> new NotFoundException("Libro no encontrado"));
     }
 
     @Transactional
     public LibroResponse actualizarLibro(Integer id, LibroRequest request) {
         LibroEntity libro = libroRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Libro no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Libro no encontrado"));
 
         if (request.getTitulo() != null) {
             libro.setTitulo(request.getTitulo());
@@ -66,13 +82,13 @@ public class LibroService {
 
         if (request.getAutorId() != null) {
             AutorEntity autor = autorRepository.findById(request.getAutorId())
-                .orElseThrow(() -> new NotFoundException("Autor no encontrado"));
+                    .orElseThrow(() -> new NotFoundException("Autor no encontrado"));
             libro.setAutor(autor);
         }
 
         if (request.getCategoriaId() != null) {
             CategoriaEntity categoria = categoriaRepository.findById(request.getCategoriaId())
-                .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
+                    .orElseThrow(() -> new NotFoundException("Categoría no encontrada"));
             libro.setCategoria(categoria);
         }
 
@@ -87,7 +103,7 @@ public class LibroService {
     @Transactional
     public void eliminarLibro(Integer id) {
         LibroEntity libro = libroRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Libro no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Libro no encontrado"));
 
         // Verificar si el libro está prestado
         if (libroRepository.tienePrestamosActivos(id)) {
@@ -99,8 +115,8 @@ public class LibroService {
 
     public List<LibroResponse> buscarPorFiltros(String titulo, Integer autorId, Integer categoriaId) {
         return libroRepository.findByFilters(titulo, autorId, categoriaId).stream()
-            .map(this::convertToResponse)
-            .collect(Collectors.toList());
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     private LibroResponse convertToResponse(LibroEntity libro) {
