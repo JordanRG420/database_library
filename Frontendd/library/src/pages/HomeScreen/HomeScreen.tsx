@@ -41,6 +41,14 @@ const HomeScreen: React.FC = () => {
   const cards: CardData[] = [
     {
       id: "1",
+      title: "Usuarios",
+      description: "Gestión de usuarios",
+      icon: personOutline,
+      color: "dark",
+      route: "/usuarios",
+    },
+    {
+      id: "2",
       title: "Autores",
       description: "Gestión de autores",
       icon: personOutline,
@@ -48,20 +56,12 @@ const HomeScreen: React.FC = () => {
       route: "/autores",
     },
     {
-      id: "2",
+      id: "3",
       title: "Libros",
       description: "Gestión de libros",
       icon: bookOutline,
       color: "medium",
       route: "/libros",
-    },
-    {
-      id: "3",
-      title: "Préstamos",
-      description: "Registro de préstamos",
-      icon: libraryOutline,
-      color: "dark",
-      route: "/prestamos",
     },
     {
       id: "4",
@@ -73,11 +73,11 @@ const HomeScreen: React.FC = () => {
     },
     {
       id: "5",
-      title: "Usuarios",
-      description: "Gestión de usuarios",
-      icon: personOutline,
+      title: "Préstamos",
+      description: "Registro de préstamos",
+      icon: libraryOutline,
       color: "dark",
-      route: "/usuarios",
+      route: "/prestamos",
     },
     {
       id: "6",

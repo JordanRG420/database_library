@@ -120,23 +120,29 @@ export function PrestamoForm() {
     const loadInitialData = async () => {
       try {
         setIsLoading(true);
-
+        
+        // Cargar libros
         const librosData = await listarLibrosDisponibles();
         setLibros(librosData);
-
+        
+        // Cargar usuarios
         try {
           const usuariosData = await listarUsuarios();
-          const usuariosFormateados = usuariosData.map((usuario) => ({
+          console.log("Usuarios recibidos del backend:", usuariosData);
+          
+          // Mapear los usuarios a la estructura esperada por el formulario
+          const usuariosFormateados = usuariosData.map(usuario => ({
             id: usuario.id,
-            nombre: usuario.username,
+            nombre: usuario.username // Convertimos username a nombre para el formulario
           }));
+          
           setUsuarios(usuariosFormateados);
         } catch (error) {
           console.error("Error cargando usuarios:", error);
           present({
             message: "Error al cargar la lista de usuarios",
             duration: 3000,
-            color: "danger",
+            color: "danger"
           });
           setUsuarios([]);
         }
@@ -226,21 +232,26 @@ export function PrestamoForm() {
           <IonItem className="form-field-group">
             <IonIcon icon={personOutline} slot="start" className="input-icon" />
             <IonLabel position="stacked">Usuario*</IonLabel>
-            <IonSelect
-              value={formik.values.usuarioId}
-              onIonChange={(e) =>
-                formik.setFieldValue("usuarioId", e.detail.value)
-              }
-              placeholder="Seleccione un usuario"
-              className="custom-select"
-              disabled={esDevolucion}
-            >
-              {usuarios.map((usuario) => (
-                <IonSelectOption key={usuario.id} value={usuario.id}>
-                  {usuario.nombre}
-                </IonSelectOption>
-              ))}
-            </IonSelect>
+            {usuarios.length > 0 ? (
+              <IonSelect
+                value={formik.values.usuarioId}
+                onIonChange={(e) =>
+                  formik.setFieldValue("usuarioId", e.detail.value)
+                }
+                placeholder="Seleccione un usuario"
+                className="custom-select"
+                disabled={esDevolucion}
+                interface="action-sheet"
+              >
+                {usuarios.map((usuario) => (
+                  <IonSelectOption key={usuario.id} value={usuario.id}>
+                    {usuario.nombre}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            ) : (
+              <IonText color="warning">No hay usuarios disponibles</IonText>
+            )}
           </IonItem>
           {formik.errors.usuarioId && (
             <IonText color="danger" className="ion-padding-start">
@@ -248,7 +259,7 @@ export function PrestamoForm() {
             </IonText>
           )}
 
-          {/* Observaciones */}
+          {/* Observaciones (solo para devolución) */}
           {esDevolucion && (
             <IonItem className="form-field-group">
               <IonIcon
@@ -269,12 +280,14 @@ export function PrestamoForm() {
             </IonItem>
           )}
 
+          {/* Mensaje de error general */}
           {errorMessage && (
             <div className="error-message">
               <IonText color="danger">{errorMessage}</IonText>
             </div>
           )}
 
+          {/* Botones de acción */}
           <div className="form-actions">
             <IonButton
               className="cancel-button"

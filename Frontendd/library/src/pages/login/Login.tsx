@@ -8,16 +8,13 @@ import {
   IonText,
   useIonToast,
   IonLoading,
-  IonImg,
-  IonRow,
-  IonCol,
-  IonGrid,
   IonIcon,
+  IonToggle,
 } from "@ionic/react";
 import "./Login.css";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
-import { personOutline, lockClosedOutline } from "ionicons/icons";
+import { personOutline, lockClosedOutline, eyeOutline, eyeOffOutline } from "ionicons/icons";
 import * as Yup from "yup";
 import { login } from "../../service/auth.service";
 import CustomHeader from "../../components/CustomHeader/CustomHeader";
@@ -36,6 +33,7 @@ export function Login() {
   const history = useHistory();
   const [present] = useIonToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -49,8 +47,7 @@ export function Login() {
         const response = await login(values);
 
         if (response.autenticado) {
-          // Guardar datos de autenticación
-          localStorage.setItem("authToken", "dummy-token"); // Reemplazar con token real
+          localStorage.setItem("authToken", "dummy-token");
           localStorage.setItem(
             "userData",
             JSON.stringify({
@@ -95,63 +92,70 @@ export function Login() {
         showMenuButton={false}
         showLogoutButton={false}
       />
-      <IonContent className="ion-padding ">
-        <form className="auth-form">
-          <form onSubmit={formik.handleSubmit}>
-            {/* Campo de usuario */}
-            <IonItem className="login-item">
-              <IonLabel position="floating">
-                <IonIcon icon={personOutline} slot="start" />
-                Nombre de usuario
-              </IonLabel>
-              <IonInput
-                name="username"
-                type="text"
-                value={formik.values.username}
-                onIonChange={(e) =>
-                  formik.setFieldValue("username", e.detail.value!)
-                }
-                onBlur={formik.handleBlur}
-              />
-            </IonItem>
-            {formik.touched.username && formik.errors.username && (
-              <IonText color="danger" className="error-message">
-                <small>{formik.errors.username}</small>
-              </IonText>
-            )}
+      <IonContent className="ion-padding">
+        <form className="usuario-form" onSubmit={formik.handleSubmit}>
+          <h2 style={{ color: "var(--ion-color-primary)", textAlign: "center" }}>
+            Iniciar Sesión
+          </h2>
 
-            {/* Campo de contraseña */}
-            <IonItem className="login-item">
-              <IonLabel position="floating">
-                <IonIcon icon={lockClosedOutline} slot="start" />
-                Contraseña
-              </IonLabel>
-              <IonInput
-                name="password"
-                type="password"
-                value={formik.values.password}
-                onIonChange={(e) =>
-                  formik.setFieldValue("password", e.detail.value!)
-                }
-                onBlur={formik.handleBlur}
-              />
-            </IonItem>
-            {formik.touched.password && formik.errors.password && (
-              <IonText color="danger" className="error-message">
-                <small>{formik.errors.password}</small>
-              </IonText>
-            )}
+          {/* Usuario */}
+          <IonItem className="form-field-group">
+            <IonIcon icon={personOutline} slot="start" className="input-icon" />
+            <IonLabel position="stacked">Nombre de usuario*</IonLabel>
+            <IonInput
+              className="custom-input"
+              name="username"
+              value={formik.values.username}
+              onIonChange={(e) =>
+                formik.setFieldValue("username", e.detail.value!)
+              }
+              onBlur={formik.handleBlur}
+              placeholder="Ingrese su nombre de usuario"
+            />
+          </IonItem>
+          {formik.touched.username && formik.errors.username && (
+            <IonText color="danger" className="ion-padding-start">
+              <small>{formik.errors.username}</small>
+            </IonText>
+          )}
 
-            {/* Botón de submit */}
-            <IonButton
-              expand="block"
-              type="submit"
-              className="login-button"
-              disabled={isLoading}
-            >
-              {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
-            </IonButton>
-          </form>
+          {/* Contraseña */}
+          <IonItem className="form-field-group">
+            <IonIcon icon={lockClosedOutline} slot="start" className="input-icon" />
+            <IonLabel position="stacked">Contraseña*</IonLabel>
+            <IonInput
+              className="custom-input"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={formik.values.password}
+              onIonChange={(e) =>
+                formik.setFieldValue("password", e.detail.value!)
+              }
+              onBlur={formik.handleBlur}
+              placeholder="Ingrese su contraseña"
+            />
+            <IonIcon
+              icon={showPassword ? eyeOffOutline : eyeOutline}
+              slot="end"
+              className="toggle-password-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            />
+          </IonItem>
+          {formik.touched.password && formik.errors.password && (
+            <IonText color="danger" className="ion-padding-start">
+              <small>{formik.errors.password}</small>
+            </IonText>
+          )}
+
+          {/* Botón de inicio */}
+          <IonButton
+            expand="block"
+            type="submit"
+            className="login-button"
+            disabled={isLoading}
+          >
+            {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
+          </IonButton>
         </form>
 
         <IonLoading isOpen={isLoading} message="Iniciando sesión..." />

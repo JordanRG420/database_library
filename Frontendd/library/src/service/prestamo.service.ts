@@ -1,3 +1,6 @@
+import axios from "axios";
+
+
 const API_URL = "http://localhost:9000/api/prestamos";
 
 interface PrestamoRequest {
@@ -95,3 +98,11 @@ export const listarPrestamos = async (): Promise<PrestamoResponse[]> => {
 
   return await response.json();
 };
+
+
+export const marcarComoDevuelto = async (id: number) => {
+  const response = await axios.patch(`/api/prestamos/${id}/devolver`);
+  return response.data;
+};
+
+

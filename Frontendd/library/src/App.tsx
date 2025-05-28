@@ -35,10 +35,11 @@ import MainLayout from "./components/layouts/MainLayout";
 import { AutorForm } from "./pages/autor/AutorForm";
 import { CategoriaForm } from "./pages/categoria/CategoriaForm";
 import { LibroForm } from "./pages/libro/LibroForm";
-import { PrestamoForm } from "./pages/prestamo/PrestamosForm";
 import { UsuarioForm } from "./pages/usuario/UsuarioForm";
 import { Login } from "./pages/login/Login";
 import HomeScreen from "./pages/HomeScreen/HomeScreen";
+import ReportesForm from "./pages/reportes/ReportesForm";
+import { PrestamoForm } from "./pages/prestamo/PrestamosForm";
 
 setupIonicReact();
 
@@ -79,6 +80,12 @@ const App: React.FC = () => (
         <Route exact path="/usuarios">
           <MainLayout pageName="Usuarios">
             <UsuarioForm />
+          </MainLayout>
+        </Route>
+
+        <Route exact path="/reportes">
+          <MainLayout pageName="Reportes">
+            <ReportesForm />
           </MainLayout>
         </Route>
 

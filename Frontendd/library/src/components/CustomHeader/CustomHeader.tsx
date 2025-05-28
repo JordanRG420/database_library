@@ -25,7 +25,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
   const history = useHistory();
 
   const handleLogout = () => {
-    history.push("/welcome");
+    history.push("/login");
   };
 
   return (

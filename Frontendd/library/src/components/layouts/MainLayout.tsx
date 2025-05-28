@@ -60,7 +60,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
               <IonItem
                 button
                 className="menu-item"
-                onClick={() => handleNavigation("/home")}
+                onClick={() => handleNavigation("/inicio")}
               >
                 <IonIcon
                   slot="start"
@@ -75,14 +75,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
               <IonItem
                 button
                 className="menu-item"
-                onClick={() => handleNavigation("/tipo-tributo")}
+                onClick={() => handleNavigation("/usuarios")}
               >
                 <IonIcon
                   slot="start"
                   icon={documentTextOutline}
                   className="menu-icon"
                 />
-                <IonLabel>Crear tipos de tributo</IonLabel>
+                <IonLabel>Usuarios</IonLabel>
               </IonItem>
             </IonMenuToggle>
 
@@ -90,14 +90,74 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageName }) => {
               <IonItem
                 button
                 className="menu-item"
-                onClick={() => handleNavigation("/factura")}
+                onClick={() => handleNavigation("/autores")}
+              >
+                <IonIcon
+                  slot="start"
+                  icon={documentTextOutline}
+                  className="menu-icon"
+                />
+                <IonLabel>Autores</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+
+            <IonMenuToggle autoHide={false}>
+              <IonItem
+                button
+                className="menu-item"
+                onClick={() => handleNavigation("/libros")}
               >
                 <IonIcon
                   slot="start"
                   icon={receiptOutline}
                   className="menu-icon"
                 />
-                <IonLabel>Generar Factura</IonLabel>
+                <IonLabel>Libros</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+
+            <IonMenuToggle autoHide={false}>
+              <IonItem
+                button
+                className="menu-item"
+                onClick={() => handleNavigation("/categorias")}
+              >
+                <IonIcon
+                  slot="start"
+                  icon={receiptOutline}
+                  className="menu-icon"
+                />
+                <IonLabel>Categorias</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+
+            <IonMenuToggle autoHide={false}>
+              <IonItem
+                button
+                className="menu-item"
+                onClick={() => handleNavigation("/prestamos")}
+              >
+                <IonIcon
+                  slot="start"
+                  icon={receiptOutline}
+                  className="menu-icon"
+                />
+                <IonLabel>Prestamos</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+
+            <IonMenuToggle autoHide={false}>
+              <IonItem
+                button
+                className="menu-item"
+                onClick={() => handleNavigation("/reportes")}
+              >
+                <IonIcon
+                  slot="start"
+                  icon={receiptOutline}
+                  className="menu-icon"
+                />
+                <IonLabel>Reportes</IonLabel>
               </IonItem>
             </IonMenuToggle>
           </IonList>
