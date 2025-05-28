@@ -145,7 +145,7 @@ const HomeScreen: React.FC = () => {
         <div className="quick-actions">
           <IonButton
             expand="block"
-            onClick={() => navigateTo("/prestamos/nuevo")}
+            onClick={() => navigateTo("/prestamos")}
           >
             <IonIcon icon={addOutline} slot="start" />
             Nuevo Préstamo
@@ -153,7 +153,7 @@ const HomeScreen: React.FC = () => {
           <IonButton
             expand="block"
             fill="outline"
-            onClick={() => navigateTo("/libros/nuevo")}
+            onClick={() => navigateTo("/libros")}
           >
             <IonIcon icon={addOutline} slot="start" />
             Nuevo Libro
