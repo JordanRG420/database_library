@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8100") // Acepta peticiones del frontend
 @RestController
 @RequestMapping("/api/prestamos")
 public class PrestamoController {
@@ -52,8 +53,8 @@ public class PrestamoController {
         return eliminado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // Endpoint específico para devolución
-    @PutMapping("/{id}/devolver")
+    // ✅ Endpoint para devolver libro (usa PATCH en vez de PUT)
+    @PatchMapping("/{id}/devolver")
     public ResponseEntity<PrestamoResponse> devolverLibro(@PathVariable Integer id) {
         PrestamoResponse response = prestamoService.devolverLibro(id);
         return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();

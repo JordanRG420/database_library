@@ -11,46 +11,47 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { listarPrestamos, marcarComoDevuelto } from "../../service/prestamo.service";
+import { useHistory } from "react-router-dom";
 import CustomHeader from "../../components/CustomHeader/CustomHeader";
 import { PrestamoResponse } from "../../models/prestamo.model";
 
 const ReporteForm = () => {
   const [prestamos, setPrestamos] = useState<PrestamoResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState("");
+  const history = useHistory();
+
+  const cargarPrestamos = async () => {
+    try {
+      setLoading(true);
+      const data = await listarPrestamos();
+      setPrestamos(data);
+    } catch (error) {
+      console.error("Error al obtener préstamos:", error);
+      setToastMessage("Error al cargar los préstamos.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPrestamos = async () => {
-      try {
-        const data = await listarPrestamos();
-        setPrestamos(data);
-      } catch (error) {
-        console.error("Error al obtener préstamos:", error);
-        setToastMessage("Error al cargar préstamos");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPrestamos();
+    cargarPrestamos();
   }, []);
 
   const handleDevolver = async (id: number) => {
     try {
       await marcarComoDevuelto(id);
-      setToastMessage("Libro devuelto con éxito");
-      // Refrescar la lista
-      const data = await listarPrestamos();
-      setPrestamos(data);
+      setToastMessage("Libro marcado como devuelto.");
+      cargarPrestamos(); // recargar la lista
     } catch (error) {
-      console.error("Error al devolver préstamo:", error);
-      setToastMessage("Error al devolver el libro");
+      console.error("Error al devolver el libro:", error);
+      setToastMessage("Error al devolver el libro.");
     }
   };
 
   return (
     <IonPage>
-      <CustomHeader pageName="Préstamos" />
+      <CustomHeader pageName="Reportes" />
       <IonContent className="ion-padding">
         {loading ? (
           <IonLoading isOpen={true} message="Cargando préstamos..." />
@@ -81,8 +82,8 @@ const ReporteForm = () => {
                     {!prestamo.devuelto && (
                       <IonButton
                         slot="end"
-                        fill="outline"
                         color="success"
+                        fill="outline"
                         onClick={() => handleDevolver(prestamo.id)}
                       >
                         Devolver
@@ -94,11 +95,12 @@ const ReporteForm = () => {
             )}
           </>
         )}
+
         <IonToast
-          isOpen={!!toastMessage}
-          message={toastMessage || ""}
+          isOpen={toastMessage !== ""}
+          message={toastMessage}
           duration={2000}
-          onDidDismiss={() => setToastMessage(null)}
+          onDidDismiss={() => setToastMessage("")}
         />
       </IonContent>
     </IonPage>

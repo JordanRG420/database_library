@@ -63,7 +63,7 @@ export function Login() {
             color: "success",
           });
 
-          history.push("/autores");
+          history.push("/inicio");
         } else {
           present({
             message: response.mensaje,

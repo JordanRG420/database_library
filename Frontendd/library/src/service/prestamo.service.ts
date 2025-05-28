@@ -101,8 +101,12 @@ export const listarPrestamos = async (): Promise<PrestamoResponse[]> => {
 
 
 export const marcarComoDevuelto = async (id: number) => {
-  const response = await axios.patch(`/api/prestamos/${id}/devolver`);
-  return response.data;
+  try {
+    const response = await axios.patch(`${API_URL}/${id}/devolver`);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error en marcarComoDevuelto:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Error al devolver el libro");
+  }
 };
-
 
