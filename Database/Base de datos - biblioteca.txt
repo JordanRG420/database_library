@@ -1,0 +1,121 @@
+Base de datos - biblioteca
+
+-- Tablas
+
+CREATE TABLE autores (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    nacionalidad VARCHAR(50)
+);
+
+CREATE TABLE categorias (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL,
+    descripcion VARCHAR(500)
+);
+
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE libros (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    autor_id INTEGER NOT NULL REFERENCES autores(id),
+    categoria_id INTEGER NOT NULL REFERENCES categorias(id),
+    disponible BOOLEAN NOT NULL DEFAULT TRUE,
+    fecha_publicacion DATE
+);
+
+CREATE TABLE prestamos (
+    id SERIAL PRIMARY KEY,
+    libro_id INTEGER NOT NULL REFERENCES libros(id),
+    usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
+    fecha_prestamo DATE NOT NULL DEFAULT CURRENT_DATE,
+    fecha_devolucion DATE,
+    devuelto BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+------------------------------------------------------------------------------
+
+-- Función para verificar login
+
+CREATE OR REPLACE FUNCTION verificar_login(
+    p_username VARCHAR,
+    p_password VARCHAR
+) RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM usuarios 
+        WHERE username = p_username 
+        AND password = p_password
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+
+-----------------------------------------------------------------------------------
+
+-- Función para prestar libro (actualiza disponibilidad)
+CREATE OR REPLACE FUNCTION prestar_libro(
+    p_libro_id INTEGER,
+    p_usuario_id INTEGER
+) RETURNS INTEGER AS $$
+DECLARE
+    nuevo_id INTEGER;
+BEGIN
+    -- Verificar disponibilidad
+    IF NOT (SELECT disponible FROM libros WHERE id = p_libro_id) THEN
+        RAISE EXCEPTION 'El libro no está disponible para préstamo';
+    END IF;
+    
+    -- Registrar préstamo
+    INSERT INTO prestamos (libro_id, usuario_id)
+    VALUES (p_libro_id, p_usuario_id)
+    RETURNING id INTO nuevo_id;
+    
+    -- Marcar libro como no disponible
+    UPDATE libros SET disponible = FALSE WHERE id = p_libro_id;
+    
+    RETURN nuevo_id;
+END;
+$$ LANGUAGE plpgsql;
+
+----------------------------------------------------------------------------------
+
+-- Función para devolver libro (actualiza disponibilidad)
+CREATE OR REPLACE FUNCTION devolver_libro(
+    p_prestamo_id INTEGER
+) RETURNS BOOLEAN AS $$
+BEGIN
+    -- Actualizar préstamo
+    UPDATE prestamos 
+    SET devuelto = TRUE, 
+        fecha_devolucion = CURRENT_DATE
+    WHERE id = p_prestamo_id;
+    
+    -- Marcar libro como disponible
+    UPDATE libros 
+    SET disponible = TRUE 
+    WHERE id = (SELECT libro_id FROM prestamos WHERE id = p_prestamo_id);
+    
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-------------------------------------------------------------------------------------
+- Funcio para prestamos activos
+
+CREATE OR REPLACE FUNCTION tiene_prestamos_activos(p_usuario_id INTEGER)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM prestamos 
+        WHERE usuario_id = p_usuario_id 
+        AND devuelto = FALSE
+    );
+END;
+$$ LANGUAGE plpgsql;

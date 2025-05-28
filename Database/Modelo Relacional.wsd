@@ -1,0 +1,44 @@
+@startuml Biblioteca
+!theme spacelab
+
+entity "Autores" as autores {
+  + id : SERIAL <<PK>>
+  nombre : VARCHAR(100)
+  nacionalidad : VARCHAR(50)
+}
+
+entity "Categorías" as categorias {
+  + id : SERIAL <<PK>>
+  nombre : VARCHAR(50)
+  descripcion : VARCHAR(500)
+}
+
+entity "Usuarios" as usuarios {
+  + id : SERIAL <<PK>>
+  username : VARCHAR(50)
+  password : VARCHAR(50)
+}
+
+entity "Libros" as libros {
+  + id : SERIAL <<PK>>
+  titulo : VARCHAR(200)
+  autor_id : INTEGER <<FK>>
+  categoria_id : INTEGER <<FK>>
+  disponible : BOOLEAN
+  fecha_publicacion : DATE
+}
+
+entity "Préstamos" as prestamos {
+  + id : SERIAL <<PK>>
+  libro_id : INTEGER <<FK>>
+  usuario_id : INTEGER <<FK>>
+  fecha_prestamo : DATE
+  fecha_devolucion : DATE
+  devuelto : BOOLEAN
+}
+
+autores ||--o{ libros : "escribe"
+categorias ||--o{ libros : "clasifica"
+usuarios ||--o{ prestamos : "realiza"
+libros ||--o{ prestamos : "se presta"
+@enduml
